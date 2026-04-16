@@ -38,7 +38,7 @@ export default function Home() {
               <Link href="/" className="text-primary-dark font-bold hover:text-accent transition-colors">Home</Link>
               <Link href="/shop" className="text-gray-600 font-semibold hover:text-accent transition-colors">Shop</Link>
               <Link href="/dashboard" className="text-gray-600 font-semibold hover:text-accent transition-colors">My Account</Link>
-              <Link href="#contact" className="text-gray-600 font-semibold hover:text-accent transition-colors">Contact Us</Link>
+              <Link href="/contact" className="text-gray-600 font-semibold hover:text-accent transition-colors">Contact Us</Link>
             </div>
 
             {/* Right: Icons */}

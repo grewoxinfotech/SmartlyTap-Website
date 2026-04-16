@@ -62,78 +62,110 @@ export default function ContactPage() {
 
       {/* Content Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 flex-1">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid lg:grid-cols-3 gap-10">
-            {/* Contact Info (Strict to phone only) */}
-            <div className="lg:col-span-1 space-y-6">
-              <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-[0_20px_40px_rgba(0,0,0,0.04)] hover:border-primary/20 transition-all duration-300 group">
-                <div className="w-14 h-14 rounded-2xl bg-primary-light text-primary flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                  <Phone className="w-7 h-7" />
-                </div>
-                <h3 className="text-xl font-bold text-primary-dark mb-2">Direct Line</h3>
-                <p className="text-gray-500 font-medium mb-4">
-                  Call or WhatsApp us directly for immediate assistance.
+        <div className="max-w-7xl mx-auto space-y-12">
+          <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.04)]">
+            <iframe
+              title="infyTap Location"
+              src="https://maps.google.com/maps?q=Surat%20Gujarat%20India&t=&z=13&ie=UTF8&iwloc=&output=embed"
+              className="w-full h-[320px] md:h-[420px] border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-10">
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-primary-dark tracking-tight">Keep in touch with us</h2>
+                <p className="mt-4 text-gray-600 font-medium leading-relaxed">
+                  At infyTap we believe in building better relationships. We know that people are so much more than what
+                  fits on a piece of paper, so we created a way to showcase the entirety of who they are. One of the most
+                  basic human instincts is to connect-and the more we know about each other, the easier it is to find
+                  those commonalities that strengthens our relationships.
                 </p>
-                <div className="text-2xl font-extrabold text-primary">
-                  9662643079
+              </div>
+
+              <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-[0_20px_40px_rgba(0,0,0,0.04)] space-y-6">
+                <div>
+                  <h3 className="text-xl font-bold text-primary-dark mb-3">Address</h3>
+                  <div className="flex items-start gap-3 text-gray-600 font-medium">
+                    <MapPin className="w-5 h-5 text-primary mt-0.5" />
+                    <p>339 Atlanta shopping mall , near sudama chowk Surat Gujarat India</p>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-gray-100">
+                  <h3 className="text-xl font-bold text-primary-dark mb-3">Contact</h3>
+                  <div className="space-y-3 text-gray-600 font-medium">
+                    <div className="flex items-center gap-3">
+                      <Phone className="w-5 h-5 text-primary" />
+                      <p>Mobile: +91 9727509747</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Mail className="w-5 h-5 text-primary" />
+                      <p>E-mail: support@infytap.com</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Contact Form */}
-            <div className="lg:col-span-2 bg-white rounded-3xl p-8 md:p-10 border border-gray-100 shadow-[0_20px_40px_rgba(0,0,0,0.04)]">
-              <h2 className="text-2xl font-bold text-primary-dark mb-2">Send a Message</h2>
-              <p className="text-gray-500 font-medium mb-8">We'll get back to you as soon as possible.</p>
+            <div className="bg-white rounded-3xl p-8 md:p-10 border border-gray-100 shadow-[0_20px_40px_rgba(0,0,0,0.04)]">
+              <h2 className="text-2xl font-bold text-primary-dark mb-8">Send a message</h2>
 
               <form className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-2">First Name</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       className="w-full px-5 py-4 bg-background border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-medium transition-all"
-                      placeholder="John"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-2">Last Name</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       className="w-full px-5 py-4 bg-background border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-medium transition-all"
-                      placeholder="Doe"
                     />
                   </div>
                 </div>
-                
+
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
-                  <input 
-                    type="email" 
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Contact Number</label>
+                  <input
+                    type="tel"
                     className="w-full px-5 py-4 bg-background border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-medium transition-all"
-                    placeholder="john@example.com"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">Message</label>
-                  <textarea 
-                    rows={5}
-                    className="w-full px-5 py-4 bg-background border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-medium transition-all resize-none"
-                    placeholder="How can we help you?"
                   />
                 </div>
 
-                <button 
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Subject</label>
+                  <input
+                    type="text"
+                    className="w-full px-5 py-4 bg-background border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-medium transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Message</label>
+                  <textarea
+                    rows={5}
+                    className="w-full px-5 py-4 bg-background border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-medium transition-all resize-none"
+                  />
+                </div>
+
+                <button
                   type="button"
                   className="w-full py-4 bg-primary text-white rounded-xl font-bold text-lg hover:bg-primary-dark transition-all shadow-[0_8px_20px_rgba(1,135,144,0.3)] hover:shadow-[0_12px_25px_rgba(1,135,144,0.4)] hover:-translate-y-1"
                 >
                   Send Message
                 </button>
-                </form>
-              </div>
+              </form>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
       </div>
     );
   }

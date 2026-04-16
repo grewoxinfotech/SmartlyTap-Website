@@ -45,7 +45,7 @@ export default function ShopPage() {
               <Link href="/" className="text-gray-600 font-semibold hover:text-accent transition-colors">Home</Link>
               <Link href="/shop" className="text-primary-dark font-bold hover:text-accent transition-colors">Shop</Link>
               <Link href="/dashboard" className="text-gray-600 font-semibold hover:text-accent transition-colors">My Account</Link>
-              <Link href="/#contact" className="text-gray-600 font-semibold hover:text-accent transition-colors">Contact Us</Link>
+              <Link href="/contact" className="text-gray-600 font-semibold hover:text-accent transition-colors">Contact Us</Link>
             </div>
 
             {/* Right: Icons */}
@@ -67,21 +67,17 @@ export default function ShopPage() {
       {/* Shop Header */}
       <section className="pt-36 pb-16 px-4 sm:px-6 lg:px-8 bg-white border-b border-gray-100 relative overflow-hidden">
         <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-primary-light rounded-full blur-3xl opacity-50 pointer-events-none"></div>
-        <div className="max-w-7xl mx-auto relative z-10">
+        <div className="max-w-7xl mx-auto relative z-10 text-center">
           <div className="text-sm text-gray-500 font-medium mb-6">
             <Link href="/" className="hover:text-primary transition-colors">Home</Link> <span className="mx-2">/</span>{" "}
             <span className="text-primary-dark font-bold">Shop</span>
           </div>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <div>
-              <h1 className="text-4xl md:text-5xl font-extrabold text-primary-dark tracking-tight">
-                Premium NFC Cards
-              </h1>
-              <p className="mt-4 text-lg text-gray-600 max-w-2xl font-medium leading-relaxed">
-                Elevate your networking with our collection of smart, contactless digital business cards.
-              </p>
-            </div>
-          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-primary-dark tracking-tight">
+            Premium NFC Cards
+          </h1>
+          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto font-medium leading-relaxed">
+            Elevate your networking with our collection of smart, contactless digital business cards.
+          </p>
         </div>
       </section>
 
