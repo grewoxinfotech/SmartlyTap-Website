@@ -29,7 +29,11 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      if (typeof window !== "undefined" && window.location.pathname.startsWith("/dashboard")) {
+      if (
+        typeof window !== "undefined" &&
+        (window.location.pathname.startsWith("/dashboard") ||
+          window.location.pathname.startsWith("/admin"))
+      ) {
         localStorage.removeItem("user_token");
         localStorage.removeItem("user_data");
         window.location.href = "/login";

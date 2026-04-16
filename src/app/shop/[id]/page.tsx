@@ -27,6 +27,22 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
     if (id) fetchProduct();
   }, [id]);
 
+  const handleAddToCart = async () => {
+    try {
+      const userStr = localStorage.getItem("user_data");
+      if (!userStr) {
+        alert("Please login to add to cart");
+        return;
+      }
+      const user = JSON.parse(userStr);
+      await apiClient.post("/cart/add", { userId: user.id, productId: product.id, qty: quantity });
+      alert("Added to cart successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add to cart");
+    }
+  };
+
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>;
   }
@@ -36,19 +52,26 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-[#F9FAFB]">
       {/* Navigation */}
       <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center gap-2">
-              <Smartphone className="w-6 h-6 text-blue-600" />
+              <Smartphone className="w-6 h-6 text-[#4F46E5]" />
               <span className="text-xl font-bold text-gray-900 tracking-tight">SmartlyTap</span>
             </Link>
+            <div className="hidden md:flex space-x-8">
+              <Link href="/how-it-works" className="text-gray-600 hover:text-[#4F46E5] font-medium">How it Works</Link>
+              <Link href="/shop" className="text-[#4F46E5] font-medium">Shop</Link>
+              <Link href="/pricing" className="text-gray-600 hover:text-[#4F46E5] font-medium">Pricing</Link>
+              <Link href="/contact" className="text-gray-600 hover:text-[#4F46E5] font-medium">Contact</Link>
+            </div>
             <div className="flex space-x-4 items-center">
+              <Link href="/login" className="hidden sm:inline text-gray-600 hover:text-[#4F46E5] font-medium px-4 py-2">Log in</Link>
               <Link href="/cart" className="p-2 text-gray-600 hover:text-blue-600 relative">
                 <ShoppingCart className="w-6 h-6" />
-                <span className="absolute top-0 right-0 bg-blue-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">0</span>
+                <span className="absolute top-0 right-0 bg-[#4F46E5] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">0</span>
               </Link>
             </div>
           </div>
@@ -56,8 +79,13 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
       </nav>
 
       {/* Product Detail Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 flex-1">
+      <section className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 flex-1">
         <div className="max-w-7xl mx-auto">
+          <div className="text-sm text-gray-500 mb-6">
+            <Link href="/" className="hover:text-[#4F46E5]">Home</Link> <span className="mx-1">/</span>{" "}
+            <Link href="/shop" className="hover:text-[#4F46E5]">Shop</Link> <span className="mx-1">/</span>{" "}
+            <span className="text-gray-700">{product.name}</span>
+          </div>
           <Link href="/shop" className="inline-flex items-center text-gray-500 hover:text-blue-600 mb-8 font-medium transition-colors">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Shop
           </Link>
@@ -89,7 +117,7 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
                 {product.name}
               </h1>
               
-              <div className="text-3xl font-bold text-blue-600 mb-6">
+              <div className="text-3xl font-bold text-[#4F46E5] mb-6">
                 ₹{product.price}
               </div>
 
@@ -120,8 +148,9 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
               </div>
 
               <button 
+                onClick={handleAddToCart}
                 disabled={product.stock <= 0}
-                className="w-full py-4 bg-blue-600 text-white rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:bg-gray-400 disabled:shadow-none disabled:transform-none flex items-center justify-center gap-2"
+                className="w-full py-4 bg-[#4F46E5] text-white rounded-full font-bold text-lg hover:bg-[#4338CA] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:bg-gray-400 disabled:shadow-none disabled:transform-none flex items-center justify-center gap-2"
               >
                 <ShoppingCart className="w-5 h-5" />
                 Add to Cart
