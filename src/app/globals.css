@@ -1,21 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F4F4F4;
+  --background: #EFEEEA;
   --card: #FFFFFF;
-  --sidebar: #FFFFFF;
-  --heading: #111827;
-  --body: #374151;
-  --muted: #9CA3AF;
-  --border: #E5E7EB;
-  --primary-dark: #005461;
-  --primary: #018790;
-  --accent: #00B7B5;
-  --primary-light: #E6F3F4;
+  --sidebar: #EFEEEA;
+  --heading: #273F4F;
+  --body: #273F4F;
+  --muted: #6B7280;
+  --border: #E9E6E0;
+  --primary-dark: #273F4F;
+  --primary: #FE7743;
+  --accent: #273F4F;
+  --primary-light: #FDE3D8;
   --success: #22C55E;
   --warning: #F59E0B;
   --error: #EF4444;
   --info: #3B82F6;
+  
+  /* Dark Hero Theme */
+  --hero-bg: #273F4F;
+  --hero-text: #ffffff;
+  --glass-bg: rgba(39, 63, 79, 0.08);
+  --glass-border: rgba(39, 63, 79, 0.22);
 }
 
 @theme {
@@ -23,18 +29,177 @@
   --color-foreground: var(--body);
   --color-primary-dark: var(--primary-dark);
   --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
   --color-accent: var(--accent);
   --color-card: var(--card);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-plus-jakarta-sans);
+}
+
+@layer components {
+  /* Standardized Typography */
+  .h1-std {
+    @apply text-[34px] md:text-[40px] font-extrabold text-primary-dark tracking-tight leading-[1.15];
+  }
+  .h2-std {
+    @apply text-[26px] md:text-[30px] font-extrabold text-primary-dark tracking-tight leading-[1.2];
+  }
+  .h3-std {
+    @apply text-[22px] md:text-[24px] font-bold text-primary-dark tracking-tight leading-[1.25];
+  }
+  .p-std {
+    @apply text-[16px] text-gray-600 font-medium leading-relaxed;
+  }
+  .subtitle-std {
+    @apply text-[16px] text-gray-600 font-medium leading-relaxed text-primary-dark/75;
+  }
+  .hero-title-animate {
+    animation: hero-fade-up 900ms ease-out both;
+  }
+  .hero-title-highlight {
+    color: var(--primary);
+  }
+  .hero-float {
+    animation: hero-float 5s ease-in-out infinite;
+  }
+  .hero-float-delayed {
+    animation: hero-float-delayed 6s ease-in-out infinite;
+  }
+  .whatsapp-pulse {
+    animation: whatsapp-pulse 2s ease-in-out infinite;
+  }
+
+  /* Standardized Layouts */
+  .section-std {
+    @apply py-10 md:py-12 px-4 sm:px-6 lg:px-8;
+  }
+  .header-std {
+    @apply pt-28 pb-10 px-4 sm:px-6 lg:px-8 bg-white border-b border-gray-100;
+  }
+
+  /* Standardized Components */
+  .btn-std {
+    @apply px-6 py-2.5 rounded-xl font-bold text-sm transition-all active:scale-95 flex items-center justify-center gap-2;
+  }
+  .btn-primary-std {
+    @apply px-6 py-2.5 rounded-xl font-bold text-sm transition-all active:scale-95 flex items-center justify-center gap-2 bg-primary text-white hover:bg-primary-dark shadow-sm;
+  }
+  .btn-secondary-std {
+    @apply px-6 py-2.5 rounded-xl font-bold text-sm transition-all active:scale-95 flex items-center justify-center gap-2 bg-white text-primary-dark border border-gray-200 hover:border-primary/30;
+  }
+  
+  .input-std {
+    @apply w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary font-bold text-sm transition-all shadow-sm;
+  }
+  .label-std {
+    @apply block text-[12px] font-bold text-gray-400 tracking-wider mb-1.5 ml-0.5;
+  }
+
+  .card-std {
+    @apply bg-white rounded-2xl p-6 border border-gray-100 shadow-sm transition-all;
+  }
+  .card-hover-std {
+    @apply bg-white rounded-2xl p-6 border border-gray-100 shadow-sm transition-all hover:shadow-md hover:border-primary/20;
+  }
+
+  /* Glassmorphism */
+  .glass-card {
+    @apply bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-xl shadow-2xl;
+  }
+  
+  .glass-button {
+    @apply bg-white/10 border border-white/10 backdrop-blur-md hover:bg-white/20 transition-all;
+  }
+
+  /* Animations */
+  .animate-mesh {
+    background: radial-gradient(at 0% 0%, hsla(184, 100%, 28%, 0.15) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(181, 100%, 35%, 0.15) 0, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(184, 98%, 34%, 0.1) 0, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(184, 100%, 28%, 0.1) 0, transparent 50%);
+    background-size: 200% 200%;
+    animation: mesh-flow 20s ease infinite;
+  }
+
+  .stagger-1 { animation-delay: 100ms; }
+  .stagger-2 { animation-delay: 200ms; }
+  .stagger-3 { animation-delay: 300ms; }
+  .stagger-4 { animation-delay: 400ms; }
+
+  .animate-gradient-x {
+    background-size: 200% auto;
+    animation: gradient-x 3s linear infinite;
+  }
 }
 
 body {
   background: var(--background);
   color: var(--body);
-  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+  font-family: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, -apple-system,
     Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
+/* User preference: remove forced all-caps styling across the site */
+.uppercase {
+  text-transform: none !important;
+}
+
+@keyframes hero-fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes hero-float-delayed {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes whatsapp-pulse {
+  0%,
+  100% {
+    box-shadow: 0 10px 30px rgba(0, 183, 181, 0.28);
+  }
+  50% {
+    box-shadow: 0 14px 36px rgba(0, 183, 181, 0.45);
+  }
+}
+
+@keyframes mesh-flow {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+}
+
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.02; /* Reduced opacity for sharpness */
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+

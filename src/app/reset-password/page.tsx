@@ -37,22 +37,22 @@ function ResetPasswordForm() {
   };
 
   return (
-    <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-      <div className="bg-white py-8 px-4 shadow-[0_20px_40px_rgba(0,0,0,0.04)] sm:rounded-3xl sm:px-10 border border-gray-100">
+    <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md relative z-10 px-4">
+      <div className="card-std py-10 px-6 sm:px-12 bg-white border-white/40 shadow-2xl">
         {message.text && (
-          <div className={`mb-6 p-4 rounded-xl text-sm font-medium ${message.type === "success" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"}`}>
+          <div className={`mb-8 p-4 rounded-xl text-[12px] font-black uppercase tracking-widest text-center border ${message.type === "success" ? "bg-green-50 text-green-600 border-green-100" : "bg-red-50 text-red-600 border-red-100"}`}>
             {message.text}
           </div>
         )}
-
+ 
         <form className="space-y-6" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              New Password
+          <div className="space-y-2">
+            <label htmlFor="password" className="label-std">
+              Personal Access Key
             </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-gray-400" />
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+                <Lock className="h-4 w-4" />
               </div>
               <input
                 id="password"
@@ -60,27 +60,30 @@ function ResetPasswordForm() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary sm:text-sm transition-colors"
-                placeholder="Enter new password"
+                className="input-std pl-12"
+                placeholder="••••••••••••"
               />
             </div>
           </div>
-
-          <div>
-            <button
-              type="submit"
-              disabled={loading || !token}
-              className="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-[0_8px_20px_rgba(1,135,144,0.3)] text-lg font-bold text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all hover:-translate-y-1 disabled:opacity-50 disabled:transform-none disabled:shadow-none"
-            >
-              {loading ? "Resetting..." : "Reset Password"}
-            </button>
-          </div>
+ 
+          <button
+            type="submit"
+            disabled={loading || !token}
+            className="w-full btn-primary-std !py-4 !text-[11px] !shadow-xl flex items-center justify-center gap-2 active:scale-95 transition-all"
+          >
+            {loading ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                OVERRIDING...
+              </>
+            ) : "COMMIT NEW PASSWORD"}
+          </button>
         </form>
-
-        <div className="mt-6 text-center">
-          <Link href="/login" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary-dark transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back to login
+ 
+        <div className="mt-10 text-center">
+          <Link href="/login" className="inline-flex items-center gap-2 text-[12px] font-black text-primary hover:text-primary-dark transition-all uppercase tracking-widest group">
+            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+            Back to Login
           </Link>
         </div>
       </div>
@@ -95,21 +98,21 @@ export default function ResetPasswordPage() {
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary-light blur-3xl opacity-50" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent blur-3xl opacity-20" />
 
-      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        <Link href="/" className="flex flex-col items-center justify-center gap-3 mb-6 group">
-          <div className="w-14 h-14 bg-primary-dark rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-            <Wifi className="w-7 h-7 text-white" />
+      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 px-4">
+        <Link href="/" className="flex flex-col items-center justify-center gap-4 mb-10 group">
+          <div className="w-16 h-16 bg-primary-dark rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-105 transition-all duration-500 border border-primary/20">
+            <Wifi className="w-8 h-8 text-white" />
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-3xl font-extrabold text-primary-dark tracking-tight leading-none">SmartlyTap</span>
-            <span className="text-xs font-semibold text-primary uppercase tracking-widest mt-1.5">World's No1 NFC Digital Business Card</span>
+            <span className="text-3xl font-black text-primary-dark tracking-tighter leading-none">SmartlyTap</span>
+            <span className="text-[12px] font-black text-primary uppercase tracking-[0.2em] mt-2">Security Override</span>
           </div>
         </Link>
-        <h2 className="mt-8 text-center text-2xl font-bold tracking-tight text-primary-dark">
-          Create new password
+        <h2 className="h2-std text-center !text-3xl mb-2">
+          New Credential
         </h2>
-        <p className="mt-2 text-center text-sm font-medium text-gray-500">
-          Please enter your new password below.
+        <p className="p-std text-center text-[12px] font-black uppercase tracking-widest opacity-60">
+          Establish your new encrypted access key below.
         </p>
       </div>
 

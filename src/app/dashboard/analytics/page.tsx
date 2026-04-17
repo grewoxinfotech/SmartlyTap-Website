@@ -33,32 +33,32 @@ const series = [
 function Stat({
   label,
   value,
-  icon,
+  icon: Icon,
   tone,
 }: {
   label: string;
   value: string;
-  icon: React.ReactNode;
-  tone: "indigo" | "blue" | "green";
+  icon: any;
+  tone: "primary" | "accent" | "green";
 }) {
   const toneClass =
-    tone === "indigo"
-      ? "from-[#EEF2FF] to-white text-[#4F46E5] ring-[#C7D2FE]"
-      : tone === "blue"
-        ? "from-[#EFF6FF] to-white text-[#3B82F6] ring-[#BFDBFE]"
-        : "from-[#ECFDF5] to-white text-[#22C55E] ring-[#BBF7D0]";
-
+    tone === "primary"
+      ? "from-primary/10 to-transparent text-primary border-primary/10"
+      : tone === "accent"
+        ? "from-accent/10 to-transparent text-accent border-accent/10"
+        : "from-green-500/10 to-transparent text-green-600 border-green-500/10";
+ 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl">
-      <div className="flex items-center gap-3">
+    <div className="card-std p-5 transition-all hover:shadow-md">
+      <div className="flex items-center gap-4">
         <div
-          className={`grid h-12 w-12 place-items-center rounded-full border border-gray-100 bg-gradient-to-br ${toneClass} ring-1`}
+          className={`grid h-10 w-10 place-items-center rounded-xl border bg-gradient-to-br ${toneClass} shadow-inner`}
         >
-          {icon}
+          <Icon className="h-5 w-5" />
         </div>
         <div>
-          <div className="text-sm text-gray-500">{label}</div>
-          <div className="text-2xl font-extrabold text-gray-900">{value}</div>
+          <div className="text-[12px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">{label}</div>
+          <div className="text-xl font-black text-primary-dark leading-none">{value}</div>
         </div>
       </div>
     </div>
@@ -69,6 +69,7 @@ export default function DashboardAnalyticsPage() {
   const { data: me } = useQuery({
     queryKey: ["me"],
     queryFn: async () => {
+      if (typeof window === "undefined") return null;
       const stored = localStorage.getItem("user_data");
       return stored ? JSON.parse(stored) : null;
     },
@@ -76,108 +77,119 @@ export default function DashboardAnalyticsPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["dashboard", "analytics", me?.id],
-    enabled: Boolean(me?.id),
+    enabled: !!me?.id,
     queryFn: async () => {
+      if (!me?.id) return null;
       const res = await apiClient.get(`/analytics/${me.id}`);
       return res.data.data as AnalyticsResponse;
     },
   });
 
-  const totalClicks = Object.values(data?.clicksByPlatform ?? {}).reduce(
-    (a, v) => a + v,
-    0
-  );
+  const totalClicks = React.useMemo(() => {
+    if (!data?.clicksByPlatform) return 0;
+    return Object.values(data.clicksByPlatform).reduce((a, v) => a + Number(v), 0);
+  }, [data?.clicksByPlatform]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-          Analytics
-        </h1>
-        <p className="text-gray-500 mt-1">Track taps and link clicks.</p>
+        <h1 className="h1-std mb-1">Performance Analytics</h1>
+        <p className="p-std text-xs font-bold uppercase tracking-widest opacity-60">Track your NFC taps and digital link interaction metrics.</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-5 md:grid-cols-3">
         <Stat
-          label="Total taps"
+          label="Total Taps"
           value={isLoading ? "—" : String(data?.totalTaps ?? 0)}
-          icon={<Activity className="h-6 w-6" />}
-          tone="indigo"
+          icon={Activity}
+          tone="primary"
         />
         <Stat
-          label="Total clicks"
+          label="Link Clicks"
           value={isLoading ? "—" : String(totalClicks)}
-          icon={<MousePointerClick className="h-6 w-6" />}
-          tone="blue"
+          icon={MousePointerClick}
+          tone="accent"
         />
         <Stat
-          label="Growth (7d)"
+          label="Engagement"
           value="12.4%"
-          icon={<TrendingUp className="h-6 w-6" />}
+          icon={TrendingUp}
           tone="green"
         />
       </div>
 
-      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-        <div className="flex items-end justify-between gap-4">
+      <div className="card-std p-6">
+        <div className="flex items-end justify-between gap-4 border-b border-gray-100 pb-6 mb-6">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Last 7 days</h2>
-            <p className="text-sm text-gray-500 mt-1">
-              Sample daily graph (wire to real daily aggregation later).
+            <h2 className="font-black text-xs uppercase tracking-widest text-primary-dark">Activity Trend (7d)</h2>
+            <p className="text-[12px] text-gray-400 font-bold uppercase tracking-tighter mt-1">
+              Visualizing tap and click frequency across the week.
             </p>
           </div>
         </div>
 
-        <div className="mt-6 h-[320px]">
+        <div className="h-[280px]">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={series} margin={{ left: 8, right: 12, top: 8, bottom: 8 }}>
-              <CartesianGrid stroke="#E5E7EB" strokeDasharray="4 4" />
-              <XAxis dataKey="day" stroke="#9CA3AF" tickLine={false} axisLine={false} />
-              <YAxis stroke="#9CA3AF" tickLine={false} axisLine={false} width={40} />
+            <AreaChart data={series} margin={{ left: -20, right: 0, top: 0, bottom: 0 }}>
+              <CartesianGrid stroke="#F3F4F6" strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="day" stroke="#9CA3AF" tick={{ fontSize: 10, fontWeight: 700 }} tickLine={false} axisLine={false} />
+              <YAxis stroke="#9CA3AF" tick={{ fontSize: 10, fontWeight: 700 }} tickLine={false} axisLine={false} />
               <Tooltip
                 contentStyle={{
-                  background: "#FFFFFF",
-                  border: "1px solid #E5E7EB",
+                  background: "#005461",
+                  border: "none",
                   borderRadius: 12,
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+                  boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+                  padding: "12px"
                 }}
-                labelStyle={{ color: "#111827", fontWeight: 600 }}
+                itemStyle={{ color: "#ffffff", fontWeight: 800, fontSize: "10px", textTransform: "uppercase" }}
+                labelStyle={{ color: "#018790", fontWeight: 900, fontSize: "12px", marginBottom: "4px" }}
               />
               <Area
                 type="monotone"
                 dataKey="taps"
-                stroke="#4F46E5"
-                fill="#EEF2FF"
-                strokeWidth={2.5}
+                stroke="#018790"
+                fill="url(#colorTaps)"
+                strokeWidth={3}
               />
               <Area
                 type="monotone"
                 dataKey="clicks"
-                stroke="#3B82F6"
-                fill="#EFF6FF"
-                strokeWidth={2.5}
+                stroke="#eab308"
+                fill="url(#colorClicks)"
+                strokeWidth={3}
               />
+              <defs>
+                <linearGradient id="colorTaps" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#018790" stopOpacity={0.1}/>
+                  <stop offset="95%" stopColor="#018790" stopOpacity={0}/>
+                </linearGradient>
+                <linearGradient id="colorClicks" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#eab308" stopOpacity={0.1}/>
+                  <stop offset="95%" stopColor="#eab308" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
             </AreaChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-        <h2 className="text-xl font-bold text-gray-900">Clicks by platform</h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {Object.entries(data?.clicksByPlatform ?? {}).length ? (
+      <div className="card-std p-6">
+        <h2 className="font-black text-xs uppercase tracking-widest text-primary-dark mb-4">Engagement by Source</h2>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {Object.entries(data?.clicksByPlatform ?? {}).length > 0 ? (
             Object.entries(data?.clicksByPlatform ?? {}).map(([k, v]) => (
               <div
                 key={k}
-                className="flex items-center justify-between rounded-2xl border border-gray-100 bg-[#F9FAFB] px-4 py-3"
+                className="flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50/50 px-4 py-3 hover:bg-white hover:shadow-sm transition-all"
               >
-                <div className="text-sm font-semibold text-gray-900">{k}</div>
-                <div className="text-sm text-gray-600">{v}</div>
+                <div className="text-[11px] font-black uppercase tracking-wider text-primary-dark">{k}</div>
+                <div className="text-[11px] font-black text-primary bg-primary/5 px-2 py-0.5 rounded-full">{v} CLICKS</div>
               </div>
             ))
           ) : (
-            <div className="text-sm text-gray-500">
-              No click data yet.
+            <div className="text-[12px] font-bold uppercase tracking-widest text-gray-400 py-4">
+              No click interaction data recorded yet.
             </div>
           )}
         </div>

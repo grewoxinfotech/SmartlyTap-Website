@@ -7,14 +7,14 @@ import { Clock, PackageCheck, ReceiptIndianRupee, XCircle } from "lucide-react";
 function StatusPill({ status }: { status: string }) {
   const cls =
     status === "PAID"
-      ? "bg-green-50 text-green-700 border-green-200"
+      ? "bg-primary/5 text-primary border-primary/20"
       : status === "PENDING"
-        ? "bg-yellow-50 text-yellow-700 border-yellow-200"
+        ? "bg-yellow-50 text-yellow-600 border-yellow-200"
         : status === "FAILED"
-          ? "bg-red-50 text-red-700 border-red-200"
-          : "bg-blue-50 text-blue-700 border-blue-200";
+          ? "bg-red-50 text-red-600 border-red-200"
+          : "bg-gray-50 text-gray-500 border-gray-200";
   return (
-    <span className={`text-xs font-semibold px-2 py-1 rounded-full border ${cls}`}>
+    <span className={`text-[12px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md border ${cls}`}>
       {status}
     </span>
   );
@@ -52,69 +52,57 @@ export default function DashboardOrdersPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-          Orders
-        </h1>
-        <p className="text-gray-500 mt-1">Your recent purchases and statuses.</p>
+        <h1 className="h1-std mb-1">Transaction History</h1>
+        <p className="p-std text-xs font-bold uppercase tracking-widest opacity-60">Manage your purchases, subscription plans, and invoice records.</p>
       </div>
 
-      <div className="grid md:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center">
-              <ReceiptIndianRupee className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="text-sm text-gray-500">Total amount</div>
-              <div className="text-2xl font-extrabold text-gray-900">
-                ₹{totals.amount.toLocaleString("en-IN")}
-              </div>
+      <div className="grid md:grid-cols-4 gap-4">
+        <div className="card-std p-5 flex items-center gap-4 transition-all hover:border-primary/20">
+          <div className="w-10 h-10 bg-primary/5 text-primary rounded-xl flex items-center justify-center border border-primary/10">
+            <ReceiptIndianRupee className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="text-[12px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">Total Spent</div>
+            <div className="text-lg font-black text-primary-dark leading-none">
+              ₹{totals.amount.toLocaleString("en-IN")}
             </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-green-100 text-green-700 rounded-full flex items-center justify-center">
-              <PackageCheck className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="text-sm text-gray-500">Paid</div>
-              <div className="text-2xl font-extrabold text-gray-900">{totals.paid}</div>
-            </div>
+        <div className="card-std p-5 flex items-center gap-4 transition-all hover:border-green-500/20">
+          <div className="w-10 h-10 bg-green-500/5 text-green-600 rounded-xl flex items-center justify-center border border-green-500/10">
+            <PackageCheck className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="text-[12px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">Successful</div>
+            <div className="text-lg font-black text-green-600 leading-none">{totals.paid}</div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-yellow-100 text-yellow-800 rounded-full flex items-center justify-center">
-              <Clock className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="text-sm text-gray-500">Pending</div>
-              <div className="text-2xl font-extrabold text-gray-900">{totals.pending}</div>
-            </div>
+        <div className="card-std p-5 flex items-center gap-4 transition-all hover:border-yellow-500/20">
+          <div className="w-10 h-10 bg-yellow-500/5 text-yellow-600 rounded-xl flex items-center justify-center border border-yellow-500/10">
+            <Clock className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="text-[12px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">In Process</div>
+            <div className="text-lg font-black text-yellow-600 leading-none">{totals.pending}</div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-red-100 text-red-700 rounded-full flex items-center justify-center">
-              <XCircle className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="text-sm text-gray-500">Failed</div>
-              <div className="text-2xl font-extrabold text-gray-900">{totals.failed}</div>
-            </div>
+        <div className="card-std p-5 flex items-center gap-4 transition-all hover:border-red-500/20">
+          <div className="w-10 h-10 bg-red-500/5 text-red-600 rounded-xl flex items-center justify-center border border-red-500/10">
+            <XCircle className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="text-[12px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">Failed</div>
+            <div className="text-lg font-black text-red-600 leading-none">{totals.failed}</div>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-6 border-b border-gray-100">
-          <h2 className="text-xl font-bold text-gray-900">Order history</h2>
-          <p className="text-sm text-gray-500 mt-1">
-            This list is loaded from the backend.
-          </p>
+      <div className="card-std overflow-hidden">
+        <div className="p-5 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+          <h2 className="font-black text-[12px] uppercase tracking-widest text-primary-dark">Invoices & Logs</h2>
+          <div className="text-[12px] text-gray-400 font-bold uppercase tracking-widest bg-white border border-gray-200 px-3 py-1 rounded-lg">Real-time sync</div>
         </div>
 
         {orders.length === 0 ? (
@@ -122,19 +110,24 @@ export default function DashboardOrdersPage() {
         ) : (
           <div className="divide-y divide-gray-100">
             {orders.map((o) => (
-              <div key={o.id} className="p-6 flex items-center justify-between gap-6">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-3">
-                    <div className="font-bold text-gray-900">{o.id}</div>
-                    <StatusPill status={o.status || "PROCESSING"} />
+              <div key={o.id} className="p-5 flex items-center justify-between gap-6 hover:bg-gray-50/50 transition-colors">
+                <div className="min-w-0 flex items-center gap-4">
+                  <div className="w-8 h-8 rounded-lg bg-background flex items-center justify-center border border-gray-100 scale-90">
+                    <ReceiptIndianRupee className="w-4 h-4 text-gray-400" />
                   </div>
-                  <div className="text-sm text-gray-500 mt-1">
-                    Created: {String(o.created_at || o.createdAt || "")}
+                  <div>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <div className="font-black text-primary-dark text-xs uppercase tracking-tight">{o.id}</div>
+                      <StatusPill status={o.status || "PROCESSING"} />
+                    </div>
+                    <div className="text-[11px] font-black uppercase text-gray-400 tracking-tighter">
+                      Registered: {new Date(o.created_at || o.createdAt || Date.now()).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm text-gray-500">Total</div>
-                  <div className="text-xl font-extrabold text-gray-900">
+                  <div className="text-[11px] font-black uppercase tracking-widest text-gray-400 mb-0.5">Amount</div>
+                  <div className="text-lg font-black text-primary-dark leading-none">
                     ₹{Number(o.total_amount || 0).toLocaleString("en-IN")}
                   </div>
                 </div>

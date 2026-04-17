@@ -15,7 +15,7 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
     const token = localStorage.getItem("user_token");
     const storedUser = localStorage.getItem("user_data");
     if (!token || !storedUser) {
-      router.push("/login");
+      router.replace("/login");
       return;
     }
     setUser(JSON.parse(storedUser));
@@ -56,35 +56,35 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
       {/* Navigation */}
       <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary-dark rounded-xl flex items-center justify-center shadow-md">
-                <Smartphone className="w-5 h-5 text-white" />
+          <div className="flex justify-between items-center h-16">
+            <Link href="/" className="flex items-center gap-2.5">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-md">
+                <Smartphone className="w-4 h-4 text-white" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-extrabold text-primary-dark tracking-tight leading-none">SmartlyTap</span>
-                <span className="text-[10px] font-semibold text-primary uppercase tracking-widest mt-0.5">User Dashboard</span>
+                <span className="text-lg font-extrabold text-primary-dark tracking-tight leading-none">SmartlyTap</span>
+                <span className="text-[12px] font-semibold text-primary uppercase tracking-widest mt-0.5">SaaS Dashboard</span>
               </div>
             </Link>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3 bg-background px-3 py-1.5 rounded-full border border-gray-100">
-                <div className="w-8 h-8 bg-primary-light rounded-full flex items-center justify-center text-primary font-bold">
+              <div className="flex items-center gap-2.5 bg-background px-3 py-1 rounded-full border border-gray-100">
+                <div className="w-6 h-6 bg-primary-light rounded-full flex items-center justify-center text-primary font-bold text-[12px]">
                   {user.name.charAt(0)}
                 </div>
-                <span className="font-bold text-primary-dark hidden sm:block pr-2">{user.name}</span>
+                <span className="font-bold text-primary-dark hidden sm:block pr-1 text-xs">{user.name}</span>
               </div>
               <button onClick={handleLogout} className="text-gray-400 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-50">
-                <LogOut className="w-5 h-5" />
+                <LogOut className="w-4 h-4" />
               </button>
             </div>
           </div>
         </div>
       </nav>
 
-      <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-32 pb-12 flex flex-col md:flex-row gap-10">
+      <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-28 pb-12 flex flex-col md:flex-row gap-8">
         {/* Sidebar */}
-        <aside className="w-full md:w-64 flex-shrink-0">
-          <nav className="space-y-3 sticky top-32">
+        <aside className="w-full md:w-60 flex-shrink-0">
+          <nav className="space-y-2 sticky top-28">
             {links.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
@@ -92,13 +92,13 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`flex items-center px-5 py-4 rounded-2xl transition-all font-bold border ${
+                  className={`flex items-center px-4 py-3 rounded-xl transition-all font-bold text-xs uppercase tracking-widest border ${
                     isActive
-                      ? "bg-primary text-white shadow-[0_8px_20px_rgba(1,135,144,0.3)] border-transparent"
-                      : "bg-white text-gray-500 hover:text-primary-dark hover:border-primary/20 hover:shadow-md border-gray-100"
+                      ? "bg-primary text-white shadow-lg border-transparent"
+                      : "bg-white text-gray-400 hover:text-primary-dark hover:border-primary/20 hover:shadow-sm border-gray-100"
                   }`}
                 >
-                  <Icon className={`w-5 h-5 mr-4 ${isActive ? "text-white" : "text-gray-400"}`} />
+                  <Icon className={`w-4 h-4 mr-3 ${isActive ? "text-white" : "text-gray-300"}`} />
                   {link.name}
                 </Link>
               );

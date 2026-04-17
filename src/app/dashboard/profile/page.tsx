@@ -97,118 +97,121 @@ export default function DashboardProfilePage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-          Profile Settings
-        </h1>
-        <p className="text-gray-500 mt-1">
-          Manage your SmartlyTap profile details and links.
+        <h1 className="h1-std mb-1">Profile Settings</h1>
+        <p className="p-std text-xs font-bold uppercase tracking-widest opacity-60">
+          Manage your SmartlyTap profile details and active links.
         </p>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
+      <div className="card-std p-8 space-y-8">
         {message && (
-          <div className="text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3">
+          <div className="text-[12px] font-black uppercase tracking-widest text-primary bg-primary/5 border border-primary/10 rounded-xl px-4 py-3 shadow-inner">
             {message}
           </div>
         )}
-
+ 
         {/* Profile Image */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
-          <div className="flex items-center gap-4">
-            {form.profileImage ? (
-              <img src={form.profileImage} alt="Profile" className="w-20 h-20 rounded-full object-cover border border-gray-200" />
-            ) : (
-              <div className="w-20 h-20 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-400">
-                No Image
-              </div>
-            )}
-            <label className="cursor-pointer bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-100 transition-colors flex items-center gap-2">
-              <UploadCloud size={16} />
-              {uploading ? "Uploading..." : "Upload New Image"}
-              <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
-            </label>
+          <label className="label-std mb-3">Profile Identity</label>
+          <div className="flex items-center gap-6">
+            <div className="relative group">
+              {form.profileImage ? (
+                <img src={form.profileImage} alt="Profile" className="w-20 h-20 rounded-2xl object-cover border-2 border-primary/10 shadow-md group-hover:scale-105 transition-transform" />
+              ) : (
+                <div className="w-20 h-20 rounded-2xl bg-gray-50 border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-300">
+                  <UploadCloud size={24} />
+                </div>
+              )}
+            </div>
+            <div className="flex-1 max-w-xs">
+              <label className="cursor-pointer bg-white border border-primary/20 text-primary px-4 py-2.5 rounded-xl text-[12px] font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all flex items-center gap-2 shadow-sm w-max active:scale-95">
+                <UploadCloud size={14} />
+                {uploading ? "Uploading..." : "Change Image"}
+                <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
+              </label>
+            <p className="text-[11px] text-gray-400 font-bold uppercase tracking-tighter mt-2">JPG, PNG or WEBP. Max 2MB.</p>
+            </div>
           </div>
         </div>
 
         {/* Form Fields */}
-        <div className="grid md:grid-cols-2 gap-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="space-y-1.5">
+            <label className="label-std">Display Name</label>
             <input
               value={form.name}
               onChange={(e) => onChange("name", e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="John Doe"
+              className="input-std"
+              placeholder="e.g. John Sebastian"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
+          <div className="space-y-1.5">
+            <label className="label-std">Business Title</label>
             <input
               value={form.businessName}
               onChange={(e) => onChange("businessName", e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="Acme Corp"
+              className="input-std"
+              placeholder="e.g. Creative Director"
             />
           </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+          <div className="md:col-span-2 space-y-1.5">
+            <label className="label-std">Professional Bio</label>
             <textarea
               value={form.bio}
               onChange={(e) => onChange("bio", e.target.value)}
               rows={3}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="Tell us about yourself..."
+              className="input-std min-h-[100px] py-3"
+              placeholder="Briefly describe your expertise..."
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp URL</label>
+          <div className="space-y-1.5">
+            <label className="label-std text-primary">WhatsApp (Phone)</label>
             <input
               value={form.whatsapp}
               onChange={(e) => onChange("whatsapp", e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="https://wa.me/..."
+              className="input-std border-primary/10 focus:ring-primary/20"
+              placeholder="e.g. +91 9876543210"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Instagram URL</label>
+          <div className="space-y-1.5">
+            <label className="label-std text-accent">Instagram Username</label>
             <input
               value={form.instagram}
               onChange={(e) => onChange("instagram", e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="https://instagram.com/..."
+              className="input-std border-accent/10 focus:ring-accent/20"
+              placeholder="e.g. @username"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Website URL</label>
+          <div className="space-y-1.5">
+            <label className="label-std">Website URL</label>
             <input
               value={form.website}
               onChange={(e) => onChange("website", e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="https://example.com"
+              className="input-std"
+              placeholder="https://yourwebsite.com"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Google Review URL</label>
+          <div className="space-y-1.5">
+            <label className="label-std text-yellow-600">Google Review Link</label>
             <input
               value={form.googleReview}
               onChange={(e) => onChange("googleReview", e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="input-std border-yellow-200 focus:ring-yellow-100"
               placeholder="https://g.page/r/..."
             />
           </div>
         </div>
 
-        <div className="pt-4 border-t border-gray-100 flex justify-end">
+        <div className="pt-6 border-t border-gray-100 flex justify-end">
           <button
             onClick={save}
             disabled={saving || uploading}
-            className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition flex items-center gap-2 font-medium disabled:opacity-50"
+            className="btn-primary-std !px-8 !py-3 !text-xs !shadow-lg active:scale-95 flex items-center gap-2"
           >
-            <Save size={18} />
-            {saving ? "Saving..." : "Save Changes"}
+            <Save size={14} />
+            {saving ? "Synchronizing..." : "Save Profile"}
           </button>
         </div>
       </div>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, use } from "react";
 import { apiClient } from "@/lib/apiClient";
 import { ShoppingCart, Star, Smartphone, Check, ArrowLeft } from "lucide-react";
+import SiteHeader from "@/components/SiteHeader";
 
 export default function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -11,6 +12,7 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState<string>("");
 
   useEffect(() => {
     async function fetchProduct() {
@@ -26,6 +28,12 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
     }
     if (id) fetchProduct();
   }, [id]);
+
+  useEffect(() => {
+    if (product?.image_url) {
+      setSelectedImage(product.image_url);
+    }
+  }, [product]);
 
   const handleAddToCart = async () => {
     try {
@@ -44,117 +52,210 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>;
+    return <div className="min-h-screen flex items-center justify-center bg-background"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;
+  }
+ 
+  if (!product) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background p-8">
+        <div className="card-std max-w-sm w-full text-center p-12">
+          <div className="w-16 h-16 bg-gray-50 text-gray-300 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-inner">
+            <Smartphone className="w-8 h-8" />
+          </div>
+          <h2 className="font-black text-xs uppercase tracking-widest text-primary-dark mb-2">Resource Missing</h2>
+          <p className="p-std text-xs mb-8 opacity-60 font-bold uppercase tracking-tighter">The requested hardware node could not be located.</p>
+          <Link href="/shop" className="btn-primary-std !py-3 !text-[12px]">Return to Inventory</Link>
+        </div>
+      </div>
+    );
   }
 
-  if (!product) {
-    return <div className="min-h-screen flex items-center justify-center text-xl text-gray-500">Product not found.</div>;
-  }
+  const parsedImages =
+    Array.isArray(product.images)
+      ? product.images
+      : typeof product.images === "string" && product.images.trim().startsWith("[")
+        ? (() => {
+            try {
+              const parsed = JSON.parse(product.images);
+              return Array.isArray(parsed) ? parsed : [];
+            } catch {
+              return [];
+            }
+          })()
+        : [];
+
+  const galleryImages = Array.from(
+    new Set(
+      [
+        product.image_url,
+        ...parsedImages,
+        ...(Array.isArray(product.gallery_images) ? product.gallery_images : []),
+      ].filter((img): img is string => typeof img === "string" && img.trim().length > 0)
+    )
+  );
+  const activeImage = selectedImage || product.image_url;
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F9FAFB]">
-      {/* Navigation */}
-      <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <Smartphone className="w-6 h-6 text-[#4F46E5]" />
-              <span className="text-xl font-bold text-gray-900 tracking-tight">SmartlyTap</span>
-            </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/how-it-works" className="text-gray-600 hover:text-[#4F46E5] font-medium">How it Works</Link>
-              <Link href="/shop" className="text-[#4F46E5] font-medium">Shop</Link>
-              <Link href="/pricing" className="text-gray-600 hover:text-[#4F46E5] font-medium">Pricing</Link>
-              <Link href="/contact" className="text-gray-600 hover:text-[#4F46E5] font-medium">Contact</Link>
-            </div>
-            <div className="flex space-x-4 items-center">
-              <Link href="/login" className="hidden sm:inline text-gray-600 hover:text-[#4F46E5] font-medium px-4 py-2">Log in</Link>
-              <Link href="/cart" className="p-2 text-gray-600 hover:text-blue-600 relative">
-                <ShoppingCart className="w-6 h-6" />
-                <span className="absolute top-0 right-0 bg-[#4F46E5] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">0</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+    <div className="flex flex-col min-h-screen bg-background">
+      <SiteHeader cartCount={0} />
       {/* Product Detail Section */}
-      <section className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 flex-1">
+      <section className="section-std pt-28 flex-1">
         <div className="max-w-7xl mx-auto">
-          <div className="text-sm text-gray-500 mb-6">
-            <Link href="/" className="hover:text-[#4F46E5]">Home</Link> <span className="mx-1">/</span>{" "}
-            <Link href="/shop" className="hover:text-[#4F46E5]">Shop</Link> <span className="mx-1">/</span>{" "}
-            <span className="text-gray-700">{product.name}</span>
+          <div className="text-[12px] text-gray-400 font-black mb-4 uppercase tracking-widest flex items-center gap-1.5">
+            <Link href="/" className="hover:text-primary transition-colors">Home</Link> <span className="opacity-30">/</span>{" "}
+            <Link href="/shop" className="hover:text-primary transition-colors">Shop</Link> <span className="opacity-30">/</span>{" "}
+            <span className="text-primary-dark">{product.name}</span>
           </div>
-          <Link href="/shop" className="inline-flex items-center text-gray-500 hover:text-blue-600 mb-8 font-medium transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Shop
+          <Link href="/shop" className="inline-flex items-center text-[12px] font-black text-gray-400 hover:text-primary mb-8 transition-all group uppercase tracking-widest">
+            <ArrowLeft className="w-3 h-3 mr-2 group-hover:-translate-x-1 transition-transform" /> Back to Inventory
           </Link>
           
-          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col md:flex-row">
-            {/* Product Image */}
-            <div className="md:w-1/2 bg-gray-100 relative aspect-square md:aspect-auto">
-              {product.image_url ? (
-                <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+            {/* Product Image Area */}
+            <div className="relative flex items-center justify-center p-4 lg:p-6 overflow-hidden rounded-xl bg-white">
+              {activeImage ? (
+                <div className="relative w-full max-w-md">
+                  <img 
+                    src={activeImage} 
+                    alt={product.name} 
+                    className="w-full aspect-square object-cover rounded-lg relative z-10 transition-transform duration-500" 
+                  />
+
+                  {galleryImages.length > 1 && (
+                    <div className="mt-4 grid grid-cols-4 sm:grid-cols-5 gap-2.5">
+                      {galleryImages.map((img, index) => (
+                        <button
+                          key={`${img}-${index}`}
+                          type="button"
+                          onClick={() => setSelectedImage(img)}
+                          className={`rounded-md overflow-hidden border transition-all ${
+                            img === activeImage
+                              ? "border-primary ring-2 ring-primary/20"
+                              : "border-border hover:border-primary/40"
+                          }`}
+                          aria-label={`View product image ${index + 1}`}
+                        >
+                          <img
+                            src={img}
+                            alt={`${product.name} preview ${index + 1}`}
+                            className="w-full h-16 object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-300">
-                  <Smartphone className="w-32 h-32 opacity-20" />
+                <div className="w-full h-full flex items-center justify-center text-primary-dark/5">
+                  <Smartphone className="w-48 h-48" />
                 </div>
               )}
             </div>
 
-            {/* Product Info */}
-            <div className="md:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
-              <div className="flex items-center gap-1 mb-4 text-yellow-400">
-                <Star className="w-5 h-5 fill-current" />
-                <Star className="w-5 h-5 fill-current" />
-                <Star className="w-5 h-5 fill-current" />
-                <Star className="w-5 h-5 fill-current" />
-                <Star className="w-5 h-5 fill-current" />
-                <span className="text-gray-500 ml-2 text-sm font-medium">(124 Reviews)</span>
+            {/* Product Info Area */}
+            <div className="p-0 md:p-1 flex flex-col justify-center">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-0.5 text-yellow-500">
+                  <Star className="w-3.5 h-3.5 fill-current" />
+                  <Star className="w-3.5 h-3.5 fill-current" />
+                  <Star className="w-3.5 h-3.5 fill-current" />
+                  <Star className="w-3.5 h-3.5 fill-current" />
+                  <Star className="w-3.5 h-3.5 fill-current" />
+                </div>
+                <span className="text-[11px] font-black uppercase tracking-widest text-primary bg-primary/5 px-2.5 py-1 rounded-md border border-primary/10">PLATINUM CHOICE</span>
               </div>
-
-              <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-2">
+ 
+              <h1 className="h1-std mb-3 !leading-tight">
                 {product.name}
               </h1>
               
-              <div className="text-3xl font-bold text-[#4F46E5] mb-6">
-                ₹{product.price}
-              </div>
-
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                {product.description || "The ultimate networking tool. One tap shares your contact info, social links, and gathers Google reviews instantly. No app required for receivers."}
-              </p>
-
-              <ul className="space-y-3 mb-10 text-gray-600">
-                <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" /> Free Digital Profile Included</li>
-                <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" /> Unlimited Taps & Scans</li>
-                <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" /> Works on Apple & Android</li>
-                <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" /> Real-time Analytics Dashboard</li>
-              </ul>
-
               <div className="flex items-center gap-4 mb-6">
-                <div className="flex items-center border border-gray-300 rounded-full bg-white">
-                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-4 py-2 text-gray-600 hover:text-black font-medium transition-colors">-</button>
-                  <span className="px-4 font-bold text-gray-900">{quantity}</span>
-                  <button onClick={() => setQuantity(quantity + 1)} className="px-4 py-2 text-gray-600 hover:text-black font-medium transition-colors">+</button>
+                <span className="text-3xl font-black text-primary-dark tracking-tighter">₹{Number(product.price).toLocaleString()}</span>
+                {product.original_price && (
+                  <div className="flex flex-col">
+                    <span className="text-[12px] text-gray-300 line-through font-black uppercase tracking-widest">₹{Number(product.original_price).toLocaleString()}</span>
+                    <span className="text-[11px] text-accent font-black uppercase tracking-widest">SAVE {Math.round((1 - product.price/product.original_price) * 100)}%</span>
+                  </div>
+                )}
+              </div>
+ 
+              <div className="mb-6 pb-6">
+                <h2 className="text-sm font-black text-primary-dark mb-2 tracking-wide">Overview</h2>
+                <p className="p-std text-[14px] leading-relaxed font-medium opacity-90">
+                  {product.description || "Transform your networking experience with the world's most advanced digital business card. One tap to share everything instantly."}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2.5 mb-8">
+                {[
+                  "NFC / QR Sync",
+                  "Contactless Data",
+                  "Global Dispatch",
+                  "Live Analytics"
+                ].map((feature, i) => (
+                  <div key={i} className="flex items-center gap-2.5 p-2.5 rounded-xl bg-card shadow-sm">
+                    <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                      <Check className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="font-bold text-primary-dark text-[11px] uppercase tracking-wide">{feature}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-3 pt-6">
+                <div className="flex flex-col sm:flex-row items-center gap-3">
+                  <div className="flex items-center h-12 bg-background rounded-xl w-full sm:w-auto px-2.5 shadow-sm">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="w-9 h-9 rounded-lg flex items-center justify-center text-primary-dark hover:bg-primary/10 transition-all font-black text-lg"
+                    >
+                      -
+                    </button>
+                    <span className="px-6 font-black text-base text-primary-dark min-w-[3rem] text-center">{quantity}</span>
+                    <button
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="w-9 h-9 rounded-lg flex items-center justify-center text-primary-dark hover:bg-primary/10 transition-all font-black text-lg"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div className="w-full sm:w-auto rounded-xl bg-primary/5 px-4 py-2 text-center sm:text-left">
+                    <span className="text-[11px] font-bold text-primary-dark/80 uppercase tracking-wide">Total</span>{" "}
+                    <span className="text-[15px] font-black text-primary-dark">₹{(Number(product.price) * quantity).toLocaleString()}</span>
+                  </div>
                 </div>
-                <div className="text-sm text-gray-500 font-medium">
-                  {product.stock > 0 ? (
-                    <span className="text-green-600">In Stock ({product.stock} left)</span>
-                  ) : (
-                    <span className="text-red-500">Out of Stock</span>
-                  )}
+
+                <div className="flex flex-col sm:flex-row items-center gap-3">
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={product.stock <= 0}
+                    className="w-full sm:flex-1 h-12 rounded-xl bg-card text-primary-dark font-bold text-[12px] uppercase tracking-wide hover:bg-background transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <ShoppingCart className="w-4 h-4" />
+                    Add To Cart
+                  </button>
+
+                  <Link
+                    href={`/checkout?productId=${product.id}&qty=${quantity}`}
+                    className="w-full sm:flex-1 h-12 rounded-xl bg-primary text-white font-bold text-[12px] uppercase tracking-wide hover:bg-primary-dark transition-all active:scale-95 flex items-center justify-center gap-2"
+                  >
+                    Buy Now
+                  </Link>
                 </div>
               </div>
 
-              <button 
-                onClick={handleAddToCart}
-                disabled={product.stock <= 0}
-                className="w-full py-4 bg-[#4F46E5] text-white rounded-full font-bold text-lg hover:bg-[#4338CA] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:bg-gray-400 disabled:shadow-none disabled:transform-none flex items-center justify-center gap-2"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                Add to Cart
-              </button>
+              <div className="mt-8 flex items-center justify-center sm:justify-start gap-2">
+                {product.stock > 0 ? (
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 text-green-600 rounded-full text-[11px] font-black uppercase tracking-widest shadow-sm">
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                    Ready to Ship ({product.stock} Units Left)
+                  </div>
+                ) : (
+                  <div className="px-3 py-1.5 bg-red-50 text-red-500 rounded-full text-[11px] font-black uppercase tracking-widest shadow-sm">
+                    Out of Stock - Restocking Soon
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

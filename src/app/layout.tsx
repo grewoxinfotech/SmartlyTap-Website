@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { MessageCircle } from "lucide-react";
+import Footer from "@/components/Footer";
 
-const inter = Inter({
-  variable: "--font-inter",
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
 });
 
@@ -20,9 +21,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
-        <Providers>{children}</Providers>
+    <html lang="en" className={`${plusJakartaSans.variable} h-full antialiased`}>
+      <body suppressHydrationWarning className="min-h-full flex flex-col">
+        <Providers>
+          <div className="flex-1 flex flex-col">
+            {children}
+          </div>
+          <Footer />
+        </Providers>
         
         {/* Floating WhatsApp Button */}
         <a 

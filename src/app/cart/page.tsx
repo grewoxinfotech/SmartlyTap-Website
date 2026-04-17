@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/apiClient";
-import { ShoppingCart, Smartphone, Trash2, ArrowRight, ArrowLeft, Wifi, Search, Lock } from "lucide-react";
+import { ShoppingCart, Smartphone, Trash2, ArrowRight, ArrowLeft, Wifi, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
+import SiteHeader from "@/components/SiteHeader";
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState<any[]>([]);
@@ -55,163 +56,97 @@ export default function CartPage() {
     }
   };
 
-  const handleCheckout = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("user_token");
-      const userStr = localStorage.getItem("user_data");
-      
-      if (!token || !userStr) {
-        // Redirect to login but keep intent
-        localStorage.setItem("redirect_after_login", "/cart");
-        router.push("/login");
-        return;
-      }
-
-      const user = JSON.parse(userStr);
-
-      // 1. Create Order in Backend
-      const orderPayload = {
-        userId: user.id,
-        items: cartItems.map(item => ({ productId: item.id, qty: item.qty }))
-      };
-      
-      // We assume order creation works. In reality, mock-prod-1 might not exist in the DB, 
-      // so we handle the UI flow mostly.
-      const orderRes = await apiClient.post("/orders/create", orderPayload);
-      
-      const orderId = orderRes.data.data.id;
-
-      // 2. Initialize Razorpay Payment
-      const payRes = await apiClient.post("/payments/create-order", { orderId });
-
-      const { razorpay_order_id, amount, currency } = payRes.data.data;
-
-      // 3. Redirect to checkout/success flow
-      router.push(`/payment/success?orderId=${encodeURIComponent(orderId)}&razorpay_order_id=${encodeURIComponent(razorpay_order_id)}`);
-
-    } catch (error: any) {
-      console.error("Checkout failed", error.response?.data || error.message);
-      alert(error.response?.data?.message || "Checkout failed. Note: mock products might not exist in your DB.");
-    } finally {
-      setLoading(false);
-    }
+  const handleCheckout = () => {
+    router.push("/checkout");
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            {/* Left: Brand */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary-dark rounded-xl flex items-center justify-center shadow-md">
-                <Wifi className="w-5 h-5 text-white" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-extrabold text-primary-dark tracking-tight leading-none">SmartlyTap</span>
-                <span className="text-[10px] font-semibold text-primary uppercase tracking-widest mt-0.5">World's No1 NFC Digital Business Card</span>
-              </div>
-            </div>
+      <SiteHeader cartCount={cartItems.length} />
 
-            {/* Middle: Menu */}
-            <div className="hidden md:flex items-center space-x-8">
-              <Link href="/" className="text-gray-600 font-semibold hover:text-accent transition-colors">Home</Link>
-              <Link href="/shop" className="text-gray-600 font-semibold hover:text-accent transition-colors">Shop</Link>
-              <Link href="/dashboard" className="text-gray-600 font-semibold hover:text-accent transition-colors">My Account</Link>
-              <Link href="/contact" className="text-gray-600 font-semibold hover:text-accent transition-colors">Contact Us</Link>
-            </div>
-
-            {/* Right: Icons */}
-            <div className="flex items-center space-x-5">
-              <button className="text-gray-500 hover:text-primary-dark transition-colors">
-                <Search className="w-5 h-5" />
-              </button>
-              <Link href="/cart" className="relative text-primary-dark hover:text-accent transition-colors group">
-                <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                <span className="absolute -top-2 -right-2 bg-accent text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                  {cartItems.length}
-                </span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <section className="pt-36 pb-20 px-4 sm:px-6 lg:px-8 flex-1">
+      <section className="header-std relative overflow-hidden">
+        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-primary-light rounded-full blur-3xl opacity-50 pointer-events-none"></div>
         <div className="max-w-4xl mx-auto relative z-10">
-          <Link href="/shop" className="inline-flex items-center text-gray-500 hover:text-primary mb-8 font-medium transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Continue Shopping
+          <Link href="/shop" className="inline-flex items-center text-xs font-bold text-gray-400 hover:text-primary mb-6 transition-colors uppercase tracking-widest">
+            <ArrowLeft className="w-3.5 h-3.5 mr-2" /> Continue Shopping
           </Link>
           
-          <h1 className="text-4xl font-extrabold text-primary-dark tracking-tight mb-8">Shopping Cart</h1>
-
+          <h1 className="h1-std mb-1 mt-4 leading-tight">Your Selection</h1>
+          <p className="p-std text-[12px] font-black uppercase tracking-widest opacity-60 mb-8">Review items before finalizing the acquisition.</p>
+ 
           {cartItems.length === 0 ? (
-            <div className="bg-white rounded-3xl p-16 text-center border border-gray-100 shadow-[0_20px_40px_rgba(0,0,0,0.04)] hover:border-primary/20 transition-colors">
-              <div className="w-24 h-24 bg-background text-gray-300 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-                <ShoppingCart className="w-12 h-12" />
+            <div className="card-std p-16 text-center mt-8 bg-white/50 border-dashed border-2">
+              <div className="w-20 h-20 bg-gray-50 text-gray-300 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-inner">
+                <ShoppingCart className="w-10 h-10" />
               </div>
-              <h2 className="text-2xl font-bold text-primary-dark mb-3">Your cart is empty</h2>
-              <p className="text-gray-500 font-medium mb-8">Looks like you haven't added anything yet.</p>
-              <Link href="/shop" className="bg-primary text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-primary-dark transition-all shadow-[0_8px_20px_rgba(1,135,144,0.3)] hover:-translate-y-1 inline-flex">
-                Browse Products
+              <h2 className="font-black text-xs uppercase tracking-widest text-primary-dark mb-2">Cart Vacant</h2>
+              <p className="p-std text-[12px] font-bold uppercase tracking-tighter opacity-60 mb-8 max-w-xs mx-auto">No hardware components have been assigned to your session.</p>
+              <Link href="/shop" className="btn-primary-std mx-auto !py-3 !px-8 !text-[12px]">
+                BROWSE INVENTORY
               </Link>
             </div>
           ) : (
-            <div className="flex flex-col md:flex-row gap-10">
-              <div className="md:w-2/3 space-y-6">
+            <div className="flex flex-col lg:grid lg:grid-cols-[1fr_380px] gap-10 mt-8">
+              <div className="space-y-4">
                 {cartItems.map((item) => (
-                  <div key={item.id} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.03)] flex items-center gap-6 hover:border-primary/20 transition-all">
-                    <div className="w-24 h-24 bg-background rounded-2xl flex items-center justify-center flex-shrink-0 shadow-inner overflow-hidden">
+                  <div key={item.id} className="card-hover-std p-5 flex items-center gap-6 bg-white border-white/40 shadow-xl">
+                    <div className="w-24 h-24 bg-gray-50 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-inner overflow-hidden border border-gray-100">
                       {item.image_url ? (
-                        <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                        <img src={item.image_url} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" />
                       ) : (
-                        <Wifi className="w-10 h-10 text-gray-300" />
+                        <Wifi className="w-8 h-8 text-primary-dark/10" />
                       )}
                     </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold text-primary-dark mb-1">{item.name}</h3>
-                      <p className="text-gray-500 font-medium">Quantity: {item.qty}</p>
-                      <div className="text-2xl font-extrabold text-primary mt-2">₹{item.price}</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[11px] text-accent font-black uppercase tracking-[0.2em] mb-1">Hardware ID: {item.id.slice(0, 8)}</div>
+                      <h3 className="font-black text-xs text-primary-dark uppercase tracking-wide truncate mb-1.5">{item.name}</h3>
+                      <div className="flex items-center gap-3">
+                        <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-0.5 rounded-lg border border-gray-100">PRO SERIES x {item.qty}</span>
+                        <div className="h-4 w-px bg-gray-100"></div>
+                        <span className="text-[12px] font-black text-primary uppercase tracking-widest">READY TO DISPATCH</span>
+                      </div>
+                      <div className="text-xl font-black text-primary-dark mt-3 tracking-tighter">₹{item.price.toLocaleString()}</div>
                     </div>
                     <button 
                       onClick={() => handleRemove(item.id)}
-                      className="p-3 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                      className="p-3 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all shadow-sm border border-transparent hover:border-red-100"
                     >
-                      <Trash2 className="w-6 h-6" />
+                      <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
                 ))}
               </div>
 
-              <div className="md:w-1/3">
-                <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-[0_20px_40px_rgba(0,0,0,0.04)] sticky top-36">
-                  <h3 className="text-2xl font-bold text-primary-dark mb-6">Order Summary</h3>
-                  <div className="space-y-4 mb-8 font-medium text-gray-600">
-                    <div className="flex justify-between">
-                      <span>Subtotal</span>
-                      <span className="text-primary-dark font-bold">₹{total}</span>
+              <div className="relative">
+                <div className="card-std sticky top-28 bg-white border-white/50 shadow-2xl p-8">
+                  <h3 className="font-black text-xs uppercase tracking-widest text-primary-dark mb-8 flex items-center gap-2">
+                    <div className="w-1 h-3 bg-accent rounded-full"></div>
+                    Order Summary
+                  </h3>
+                  <div className="space-y-5 mb-10">
+                    <div className="flex justify-between items-center group">
+                      <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Subtotal Assets</span>
+                      <span className="text-sm font-black text-primary-dark tracking-tighter">₹{total.toLocaleString()}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Shipping</span>
-                      <span className="text-accent font-bold">Free</span>
+                    <div className="flex justify-between items-center">
+                      <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Global Logistics</span>
+                      <span className="text-[12px] font-black text-accent uppercase tracking-[0.2em] bg-accent/5 px-2.5 py-1 rounded-full border border-accent/10 shadow-inner">COMPLIMENTARY</span>
                     </div>
-                    <div className="border-t border-gray-100 pt-4 flex justify-between items-center mt-2">
-                      <span className="font-bold text-primary-dark text-lg">Total</span>
-                      <span className="text-3xl font-extrabold text-primary">₹{total}</span>
+                    <div className="pt-6 border-t border-gray-100 mt-6 flex justify-between items-center">
+                      <span className="font-black text-xs uppercase tracking-widest text-primary-dark">TOTAL ACQUISITION</span>
+                      <span className="text-3xl font-black text-primary tracking-tighter">₹{total.toLocaleString()}</span>
                     </div>
                   </div>
                   
                   <button 
                     onClick={handleCheckout}
                     disabled={loading}
-                    className="w-full py-4 bg-primary text-white rounded-xl font-bold text-lg hover:bg-primary-dark transition-all shadow-[0_8px_20px_rgba(1,135,144,0.3)] hover:shadow-[0_12px_25px_rgba(1,135,144,0.4)] hover:-translate-y-1 flex items-center justify-center gap-2 disabled:bg-gray-400 disabled:shadow-none disabled:transform-none"
+                    className="w-full btn-primary-std !py-4 !text-[12px] !shadow-xl active:scale-95 flex items-center justify-center gap-2"
                   >
-                    {loading ? "Processing..." : "Proceed to Checkout"} <ArrowRight className="w-5 h-5 ml-1" />
+                    {loading ? "PROCESSING..." : "COMMIT TO CHECKOUT"} <ArrowRight className="w-4 h-4" />
                   </button>
-                  <p className="text-sm font-medium text-center text-gray-400 mt-6 flex items-center justify-center gap-2">
-                    <Lock className="w-4 h-4" /> Secure payments
+                  <p className="text-[11px] font-black text-center text-gray-300 mt-8 flex items-center justify-center gap-2 uppercase tracking-[0.3em]">
+                    <Lock className="w-3.5 h-3.5 opacity-40" /> SECURE TUNNEL ACTIVE
                   </p>
                 </div>
               </div>

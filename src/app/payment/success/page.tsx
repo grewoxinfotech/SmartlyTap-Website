@@ -10,43 +10,46 @@ export default function PaymentSuccessPage() {
   const razorpayOrderId = sp.get("razorpay_order_id");
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] flex items-center justify-center p-6">
-      <div className="w-full max-w-lg rounded-3xl border border-gray-100 bg-white p-10 shadow-xl">
-        <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-[#ECFDF5] text-[#22C55E] ring-1 ring-[#BBF7D0]">
-          <CheckCircle2 className="h-7 w-7" />
+    <div className="min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none"></div>
+      
+      <div className="card-std w-full max-w-lg bg-white border-white/40 shadow-2xl p-12 text-center relative z-10">
+        <div className="mx-auto grid h-20 w-20 place-items-center rounded-3xl bg-green-50 text-green-500 shadow-inner border border-green-100 mb-8 animate-in zoom-in duration-500">
+          <CheckCircle2 className="h-10 w-10" />
         </div>
-        <h1 className="mt-6 text-center text-2xl font-extrabold text-gray-900">
-          Payment initiated
+        
+        <h1 className="h1-std mb-2 items-center justify-center">
+          Transaction Initialized
         </h1>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Your order is created. When Razorpay capture/verify is connected, this page will confirm payment and show invoice.
+        <p className="p-std text-[12px] font-black uppercase tracking-widest opacity-60 mb-10 max-w-sm mx-auto leading-relaxed">
+          Your order protocol has been established. Synchronization with the secure payment gateway is active.
         </p>
 
-        <div className="mt-6 space-y-3 rounded-2xl border border-gray-100 bg-[#F9FAFB] p-4 text-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-gray-500">Order ID</span>
-            <span className="font-semibold text-gray-900">{orderId || "—"}</span>
+        <div className="space-y-4 rounded-3xl border border-gray-50 bg-gray-50/50 p-6 text-left shadow-inner mb-10">
+          <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+            <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Internal Order ID</span>
+            <span className="text-[11px] font-black text-primary-dark uppercase tracking-tight">{orderId || "SYNC_PENDING"}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-gray-500">Razorpay Order</span>
-            <span className="font-semibold text-gray-900">{razorpayOrderId || "—"}</span>
+            <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Network Transaction</span>
+            <span className="text-[11px] font-black text-accent uppercase tracking-tight">{razorpayOrderId || "LINKING..."}</span>
           </div>
         </div>
 
-        <div className="mt-8 grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           <Link
             href="/dashboard/orders"
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#4F46E5] px-5 py-3 text-sm font-bold text-white hover:bg-[#4338CA]"
+            className="btn-primary-std !py-4 !text-[12px] !shadow-lg active:scale-95 flex items-center justify-center gap-2"
           >
             <ShoppingBag className="h-4 w-4" />
-            View orders
+            VIEW COMMAND CENTER
           </Link>
           <Link
             href="/"
-            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-gray-200 bg-white px-5 py-3 text-sm font-bold text-gray-900 hover:bg-gray-50"
+            className="btn-secondary-std !py-4 !text-[12px] !shadow-lg active:scale-95 flex items-center justify-center gap-2"
           >
             <FileText className="h-4 w-4" />
-            Download invoice
+            DOWNLOAD ARCHIVE
           </Link>
         </div>
       </div>

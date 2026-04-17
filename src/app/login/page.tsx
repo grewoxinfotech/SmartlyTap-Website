@@ -55,88 +55,86 @@ export default function LoginPage() {
       
       <nav className="w-full bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center items-center h-20">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary-dark rounded-xl flex items-center justify-center shadow-md">
-                <Wifi className="w-5 h-5 text-white" />
+          <div className="flex justify-center items-center h-16">
+            <Link href="/" className="flex items-center gap-2.5">
+              <div className="w-8 h-8 bg-primary-dark rounded-lg flex items-center justify-center shadow-md">
+                <Wifi className="w-4 h-4 text-white" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-extrabold text-primary-dark tracking-tight leading-none">SmartlyTap</span>
-                <span className="text-[10px] font-semibold text-primary uppercase tracking-widest mt-0.5">World's No1 NFC Digital Business Card</span>
+                <span className="text-lg font-extrabold text-primary-dark tracking-tight leading-none">SmartlyTap</span>
+                <span className="text-[12px] font-semibold text-primary uppercase tracking-widest mt-0.5">World's No1 NFC Digital Business Card</span>
               </div>
             </Link>
           </div>
         </div>
       </nav>
 
-      <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8 bg-white/85 backdrop-blur p-10 rounded-3xl shadow-[0_20px_40px_rgba(0,0,0,0.04)] border border-gray-100">
+      <div className="flex-1 flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8">
+        <div className="card-std max-w-sm w-full space-y-6">
           <div className="text-center">
-            <div className="mx-auto h-14 w-14 bg-primary-light text-primary rounded-2xl flex items-center justify-center mb-6">
-              <LogIn className="h-7 w-7" />
+            <div className="mx-auto h-12 w-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6 shadow-inner border border-primary/10">
+              <LogIn className="h-6 w-6" />
             </div>
-            <h2 className="text-3xl font-extrabold text-primary-dark">Welcome back</h2>
-            <p className="mt-2 text-sm font-medium text-gray-500">
-              Sign in to manage your smart profile
+            <h2 className="h2-std mb-1">Access Dashboard</h2>
+            <p className="p-std text-[12px] font-black uppercase tracking-widest opacity-60">
+              Authorized credentials required for entry.
             </p>
           </div>
           
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm">
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-2.5 rounded-xl text-[12px] font-black uppercase tracking-widest text-center shadow-sm">
                 {error}
               </div>
             )}
             
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+              <div className="space-y-1.5">
+                <label className="label-std">Correspondence Email</label>
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm transition-all"
-                  placeholder="you@example.com"
+                  className="input-std"
+                  placeholder="name@company.com"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <div className="space-y-1.5">
+                <label className="label-std">Secure Password</label>
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm transition-all"
+                  className="input-std"
                   placeholder="••••••••"
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="text-sm">
-                <Link href="/forgot-password" className="font-medium text-blue-600 hover:text-blue-500">
-                  Forgot your password?
-                </Link>
-              </div>
+            <div className="flex items-center justify-end">
+              <Link href="/forgot-password" virtual-id="forgot-password-link" className="text-[12px] font-black uppercase tracking-widest text-primary hover:text-primary-dark transition-all">
+                Recovery Password?
+              </Link>
             </div>
 
             <div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-[0_8px_20px_rgba(1,135,144,0.3)] text-lg font-bold text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all hover:-translate-y-1 disabled:opacity-50 disabled:transform-none disabled:shadow-none"
+                className="w-full btn-primary-std py-3.5 !text-[12px] !shadow-lg active:scale-95"
               >
-                {loading ? "Signing in..." : "Sign in"}
+                {loading ? "AUTHENTICATING..." : "AUTHORIZE ACCESS"}
               </button>
             </div>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Don't have an account?{" "}
-              <Link href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
-                Sign up
+          <div className="mt-8 text-center border-t border-gray-100 pt-6">
+            <p className="text-[12px] text-gray-400 font-bold uppercase tracking-widest">
+              New to SmartlyTap?{" "}
+              <Link href="/signup" className="text-primary hover:text-primary-dark transition-all ml-1 underline underline-offset-4 decoration-2">
+                Create Account
               </Link>
             </p>
           </div>

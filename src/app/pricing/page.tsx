@@ -56,22 +56,27 @@ export default function PricingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+      <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <Smartphone className="w-6 h-6 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900 tracking-tight">SmartlyTap</span>
+            <Link href="/" className="flex items-center gap-2.5">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-md">
+                <Smartphone className="w-4 h-4 text-white" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-lg font-extrabold text-primary-dark tracking-tight leading-none">SmartlyTap</span>
+                <span className="text-[12px] font-semibold text-primary uppercase tracking-widest mt-0.5">SaaS Platform</span>
+              </div>
             </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/how-it-works" className="text-gray-600 hover:text-blue-600 font-medium">How it Works</Link>
-              <Link href="/shop" className="text-gray-600 hover:text-blue-600 font-medium">Shop</Link>
-              <Link href="/pricing" className="text-blue-600 font-medium">Pricing</Link>
-              <Link href="/contact" className="text-gray-600 hover:text-blue-600 font-medium">Contact</Link>
+            <div className="hidden md:flex items-center space-x-6">
+              <Link href="/" className="text-gray-600 font-semibold text-sm hover:text-primary transition-colors">Home</Link>
+              <Link href="/shop" className="text-gray-600 font-semibold text-sm hover:text-primary transition-colors">Shop</Link>
+              <Link href="/pricing" className="text-primary font-bold text-sm">Pricing</Link>
+              <Link href="/contact" className="text-gray-600 font-semibold text-sm hover:text-primary transition-colors">Contact</Link>
             </div>
-            <div className="flex space-x-4">
-              <Link href="/login" className="text-gray-600 hover:text-blue-600 font-medium px-4 py-2">Log in</Link>
-              <Link href="/shop" className="bg-blue-600 text-white px-5 py-2 rounded-full font-medium hover:bg-blue-700 transition-colors shadow-sm">
+            <div className="flex items-center space-x-4">
+              <Link href="/login" className="text-gray-600 font-semibold text-sm hover:text-primary transition-colors">Log in</Link>
+              <Link href="/shop" className="btn-primary-std !py-2 !px-4 !text-xs !shadow-none">
                 Get Your Card
               </Link>
             </div>
@@ -80,60 +85,60 @@ export default function PricingPage() {
       </nav>
 
       {/* Pricing Header */}
-      <section className="pt-32 pb-12 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="header-std bg-white">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
+          <h1 className="h1-std mb-4">
             Simple, Transparent Pricing
           </h1>
-          <p className="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
-            Choose the perfect plan for your networking needs. Upgrade or downgrade at any time.
+          <p className="p-std text-base max-w-2xl mx-auto">
+            Choose the perfect plan for your networking needs. Upgrade or downgrade at any time. No hidden fees.
           </p>
         </div>
       </section>
 
       {/* Pricing Cards */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 flex-1">
+      <section className="section-std flex-1">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto items-stretch">
             {plans.map((plan, i) => (
               <div 
                 key={i} 
-                className={`relative flex flex-col p-8 rounded-3xl border ${plan.popular ? 'bg-blue-600 border-blue-600 shadow-xl scale-105 z-10' : 'bg-white border-gray-200 shadow-sm'}`}
+                className={`relative flex flex-col p-8 rounded-3xl border-2 transition-all duration-300 ${plan.popular ? 'bg-primary border-primary shadow-xl scale-105 z-10' : 'bg-white border-gray-100/50 shadow-sm hover:border-primary/20 hover:shadow-md'}`}
               >
                 {plan.popular && (
                   <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                    <span className="bg-accent text-white text-[12px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-md">
                       Most Popular
                     </span>
                   </div>
                 )}
                 
-                <h3 className={`text-xl font-bold mb-2 ${plan.popular ? 'text-white' : 'text-gray-900'}`}>{plan.name}</h3>
-                <p className={`text-sm mb-6 ${plan.popular ? 'text-blue-100' : 'text-gray-500'}`}>{plan.description}</p>
+                <h3 className={`h3-std mb-1 ${plan.popular ? 'text-white' : ''}`}>{plan.name}</h3>
+                <p className={`text-xs font-bold mb-6 ${plan.popular ? 'text-primary-light/80' : 'text-gray-400'}`}>{plan.description}</p>
                 
-                <div className="mb-6 flex items-baseline">
-                  <span className={`text-4xl font-extrabold tracking-tight ${plan.popular ? 'text-white' : 'text-gray-900'}`}>{plan.price}</span>
-                  <span className={`ml-2 text-sm font-medium ${plan.popular ? 'text-blue-200' : 'text-gray-500'}`}>{plan.period}</span>
+                <div className="mb-8 flex items-baseline gap-1.5 pb-6 border-b border-white/10">
+                  <span className={`text-4xl font-black tracking-tight ${plan.popular ? 'text-white' : 'text-primary-dark'}`}>{plan.price}</span>
+                  <span className={`text-[12px] font-bold uppercase tracking-widest ${plan.popular ? 'text-primary-light/60' : 'text-gray-400'}`}>{plan.period}</span>
                 </div>
                 
-                <ul className="space-y-4 mb-8 flex-1">
+                <ul className="space-y-4 mb-10 flex-1">
                   {plan.features.map((feature, j) => (
-                    <li key={j} className="flex items-start">
-                      <CheckCircle2 className={`w-5 h-5 mr-3 flex-shrink-0 ${plan.popular ? 'text-blue-200' : 'text-green-500'}`} />
-                      <span className={plan.popular ? 'text-white' : 'text-gray-700'}>{feature}</span>
+                    <li key={j} className="flex items-start gap-3">
+                      <CheckCircle2 className={`w-4 h-4 flex-shrink-0 mt-0.5 ${plan.popular ? 'text-accent fill-accent' : 'text-primary'}`} />
+                      <span className={`text-[13px] font-bold ${plan.popular ? 'text-white' : 'text-gray-600'}`}>{feature}</span>
                     </li>
                   ))}
                 </ul>
                 
                 <Link 
                   href={plan.name === 'Basic' ? '/signup' : '/shop'} 
-                  className={`w-full py-4 rounded-xl font-bold text-center transition-all flex items-center justify-center ${
+                  className={`w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest text-center transition-all flex items-center justify-center gap-2 active:scale-95 ${
                     plan.popular 
-                      ? 'bg-white text-blue-600 hover:bg-gray-50' 
-                      : 'bg-gray-900 text-white hover:bg-gray-800'
+                      ? 'bg-white text-primary hover:bg-background shadow-md' 
+                      : 'bg-primary-dark text-white hover:bg-primary shadow-sm'
                   }`}
                 >
-                  {plan.cta} <ArrowRight className="w-4 h-4 ml-2" />
+                  {plan.cta} <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             ))}
